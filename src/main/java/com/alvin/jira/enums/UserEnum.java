@@ -16,26 +16,26 @@ import cn.hutool.core.util.StrUtil;
  */
 public enum UserEnum {
 
-    CXW("cxw", "陈旭伟", "dev", "15558007607"),
-    YZW("yuzw", "余志伟", "dev", "17857093638"),
-    XLJ("xuanlj", "宣林杰", "dev", "18657113845"),
-    LF("lufan", "卢凡", "dev", "17816875536"),
-    JQJ("jiangqijie", "蒋琦杰", "dev", "13777881457"),
-    NJL("niejl", "聂嘉梁", "dev", "18698578696"),
-    LYZ("liyz", "李元智", "dev", "15270032962"),
-    LY("liyang", "李杨", "dev", "15710403550"),
-    CZR("chengzr", "程峥嵘", "dev", "15568928265"),
-    CS("chensen", "陈森", "dev", "17816096717"),
-    QJ("qiangj", "强瑾", "dev", "17393165662"),
-    LH("lingh", "凌湖", "dev", "18055604480"),
-    ZMS("zhangms", "章敏松", "dev", "17857072843"),
-    WZP("weizp", "卫志鹏", "dev", "18169661319"),
-    CJ("chenj", "陈杰", "dev", "13777823073"),
-    XJY("xiajy", "夏靖宇", "dev", "15856992420"),
-    ZX("zhangx", "张笑", "dev", "18291072670"),
-    QZW("qizw", "戚泽威", "dev", "15757386707"),
-    XMM("xumm", "徐萌萌", "dev", "18910260525"),
-    GRT("guort", "郭荣婷", "dev", "17823886624");
+    CXW("cxw", "陈旭伟", "other", "15558007607"),
+    YZW("yuzw", "余志伟", "sdm", "17857093638"),
+    XLJ("xuanlj", "宣林杰", "sdm", "18657113845"),
+    LF("lufan", "卢凡", "sdm", "17816875536"),
+    JQJ("jiangqijie", "蒋琦杰", "other", "13777881457"),
+    NJL("niejl", "聂嘉梁", "other", "18698578696"),
+    LYZ("liyz", "李元智", "sdm", "15270032962"),
+    LY("liyang", "李杨", "other", "15710403550"),
+    CZR("chengzr", "程峥嵘", "feature", "15568928265"),
+    CS("chensen", "陈森", "other", "17816096717"),
+    QJ("qiangj", "强瑾", "feature", "17393165662"),
+    LH("lingh", "凌湖", "feature", "18055604480"),
+    ZMS("zhangms", "章敏松", "feature", "17857072843"),
+    WZP("weizp", "卫志鹏", "sdm", "18169661319"),
+    CJ("chenj", "陈杰", "front", "13777823073"),
+    XJY("xiajy", "夏靖宇", "front", "15856992420"),
+    ZX("zhangx", "张笑", "front", "18291072670"),
+    QZW("qizw", "戚泽威", "front", "15757386707"),
+    XMM("xumm", "徐萌萌", "front", "18910260525"),
+    GRT("guort", "郭荣婷", "front", "17823886624");
 
     private String userName;
 
@@ -95,4 +95,21 @@ public enum UserEnum {
         };
         return null;
     }
+
+    public static String getRealNameByUserName(String userName) {
+        Optional<UserEnum> userEnumOp = Arrays.stream(UserEnum.values()).filter(item -> StrUtil.equals(userName, item.getUserName())).findFirst();
+        if(userEnumOp.isPresent()) {
+            return userEnumOp.get().realName;
+        };
+        return null;
+    }
+
+    public static UserEnum getUser(String userName) {
+        Optional<UserEnum> userEnumOp = Arrays.stream(UserEnum.values()).filter(item -> StrUtil.equals(userName, item.getUserName())).findFirst();
+        if(userEnumOp.isPresent()) {
+            return userEnumOp.get();
+        };
+        return null;
+    }
+
 }

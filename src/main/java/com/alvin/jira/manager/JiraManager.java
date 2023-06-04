@@ -15,9 +15,6 @@ import net.rcarz.jiraclient.BasicCredentials;
 import net.rcarz.jiraclient.Issue;
 import net.rcarz.jiraclient.JiraClient;
 import net.rcarz.jiraclient.JiraException;
-import net.rcarz.jiraclient.User;
-import net.rcarz.jiraclient.agile.AgileClient;
-import net.rcarz.jiraclient.agile.Board;
 
 /**
  * <p>描 述：</p>
@@ -34,7 +31,7 @@ public class JiraManager {
 
     public static JiraClient getJiraClient() throws JiraException {
         BasicCredentials creds = new BasicCredentials("cxw", "bangsun@123");
-        JiraClient jiraClient = new JiraClient("http://jira.bsfit.com.cn:8080/", creds);
+        JiraClient jiraClient = new JiraClient("http://10.100.1.17:8080/", creds);
         return jiraClient;
     }
 
@@ -44,7 +41,7 @@ public class JiraManager {
         String endDateStr = DateUtil.format(endDate, DATE_FORMATE);
         String userTasksJql = JqlManager.getUserTasksJql(allUserNames, startDateStr, endDateStr);
         JiraClient jiraClient = getJiraClient();
-        Issue.SearchResult searchResult = jiraClient.searchIssues(userTasksJql);
+        Issue.SearchResult searchResult = jiraClient.searchIssues(userTasksJql, 100000);
         return searchResult.issues;
     }
 

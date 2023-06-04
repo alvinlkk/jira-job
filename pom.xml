@@ -31,8 +31,13 @@
         <dependency>
             <groupId>net.rcarz</groupId>
             <artifactId>jira-client</artifactId>
-            <version>0.6-SNAPSHOT</version>
+            <version>0.5</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <version>3.3.2</version>
         </dependency>
         <dependency>
             <groupId>cn.hutool</groupId>

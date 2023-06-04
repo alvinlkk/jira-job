@@ -1,18 +1,18 @@
 package com.alvin.jira.service.impl;
 
 import java.util.ArrayList;;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.springframework.stereotype.Service;
 
+import com.alvin.jira.dto.EmployeeReportItemDTO;
 import com.alvin.jira.enums.UserEnum;
 import com.alvin.jira.manager.JiraManager;
 import com.alvin.jira.service.JiraService;
@@ -46,11 +46,7 @@ public class JiraServiceImpl implements JiraService {
         DateTime now = DateTime.now();
         DateTime dateTime = now.withDayOfWeek(DateTimeConstants.MONDAY);
         DateTime nextWeekMonday = dateTime.plusWeeks(1);
-        String dueDateStart = nextWeekMonday.toString(DateTimeFormat.forPattern("yyyy-MM-dd"));
-        System.out.println(dueDateStart);
-        DateTime nextWeekFriday = dateTime.plusDays(5);
-        String dueDateEnd = nextWeekFriday.toString(DateTimeFormat.forPattern("yyyy-MM-dd"));
-        System.out.println(dueDateEnd);
+        DateTime nextWeekFriday = nextWeekMonday.plusDays(5);
         return getUnCreateTaskUsersBetweenDueDate(nextWeekMonday.toDate(), nextWeekFriday.toDate());
     }
 
@@ -90,4 +86,68 @@ public class JiraServiceImpl implements JiraService {
                         Collectors.mapping(Issue::getKey, Collectors.toList())));
         return userJiraIdsMap;
     }
+
+
+    @Override
+    @SneakyThrows
+    public List<EmployeeReportItemDTO> getWeeklyReportJiraIssues() {
+        DateTime now = DateTime.now();
+        DateTime dateTime = now.withDayOfWeek(DateTimeConstants.MONDAY);
+        DateTime nextWeekMonday = dateTime.plusWeeks(1);
+        DateTime nextWeekFriday = nextWeekMonday.plusDays(5);
+        List<EmployeeReportItemDTO> reportItems = getDateEmployeeReportItems(dateTime.toDate(), nextWeekFriday.toDate());
+        return reportItems;
+
+    }
+
+    private List<EmployeeReportItemDTO> getDateEmployeeReportItems(Date startDate, Date endDate) throws JiraException {
+        List<Issue> jiraIssues = JiraManager.getAllUserTasks(startDate, endDate);
+        List<EmployeeReportItemDTO> reportItems = new ArrayList<>();
+        Map<String, List<Issue>> jiraIssueGroupMap = jiraIssues.stream().collect(Collectors.groupingBy(item -> item.getAssignee().getName()));
+        jiraIssueGroupMap.forEach((jiraName, issues) -> {
+            UserEnum user = UserEnum.getUser(jiraName);
+            if(user == null) {
+                return;
+            }
+
+            Map<String, Integer> summaryHoursMap = issues.stream().collect(Collectors.groupingBy(issue -> {
+                String summary = "";
+                if(issue.getParent() != null) {
+                    summary += issue.getParent().getSummary() + "——";
+                }
+                summary += issue.getSummary();
+                return summary;
+            }, Collectors.summingInt(issue -> {
+                Object hours = issue.getField("customfield_12100");
+                if (hours == null || StrUtil.isBlank(hours.toString())) {
+                    return 0;
+                }
+                return Double.valueOf(hours.toString()).intValue();
+            })));
+
+            summaryHoursMap.forEach((summary, hours) -> {
+                EmployeeReportItemDTO employeeReportItem = new EmployeeReportItemDTO();
+                employeeReportItem.setName(user.getRealName());
+                employeeReportItem.setGroup(user.getUserType());
+                employeeReportItem.setCate(user.getUserType());
+                employeeReportItem.setPercent("100%");
+                employeeReportItem.setJobTarget(summary);
+                employeeReportItem.setTotalHours(hours);
+                reportItems.add(employeeReportItem);
+            });
+        });
+        return reportItems;
+    }
+
+    @SneakyThrows
+    @Override
+    public List<EmployeeReportItemDTO> getWeekReportjiraIssues(Date date) {
+        DateTime dateTime = new DateTime(date);
+        DateTime monday = dateTime.withDayOfWeek(DateTimeConstants.MONDAY);
+        DateTime friday = dateTime.plusDays(5);
+        return this.getDateEmployeeReportItems(monday.toDate(), friday.toDate());
+    }
 }
+
+
+
