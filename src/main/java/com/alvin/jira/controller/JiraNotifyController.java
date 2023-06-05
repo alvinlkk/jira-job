@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alvin.jira.service.DingTalkNotifyService;
 
 /**
- * <p>描 述：</p>
+ * <p>jira任务通知</p>
  *
  * @author cxw (332059317@qq.com)
  * @version 1.0.0
@@ -21,19 +21,30 @@ public class JiraNotifyController {
     @Autowired
     private DingTalkNotifyService dingTalkNotifyService;
 
+    /**
+     * 通知今日未创建任务人员
+     * @return
+     */
     @GetMapping("/todayUnCreateTasks")
     public String notifyTodayUncreateTasks() {
         dingTalkNotifyService.notifyTodayUncreateTasks();;
         return "ok";
     }
 
+    /**
+     * 通知下周未创建任务成员
+     * @return
+     */
     @GetMapping("/nextWeekUnCreateTasks")
     public String notifynextWeekUnCreateTasks() {
         dingTalkNotifyService.notifyNextWeekUnCreateTasks();;
         return "ok";
     }
 
-
+    /**
+     * 存在过期未关闭任务的人员
+     * @return
+     */
     @GetMapping("/expireTasks")
     public String notifyExpireTasks() {
         dingTalkNotifyService.notifyExpireTasks();;

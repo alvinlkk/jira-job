@@ -21,7 +21,7 @@ import com.alvin.jira.service.WeeklyReportService;
 import lombok.SneakyThrows;
 
 /**
- * 类的描述
+ * 周报服务
  *
  * @author alvin
  * @version 7.x
@@ -36,6 +36,10 @@ public class WeeklyReportController {
     @Autowired
     private WeeklyReportService weeklyReportService;
 
+    /**
+     * 获取团队成员周报内容
+     * @return
+     */
     @GetMapping("/detail")
     public List<EmployeeReportItemDTO> reportDetail () {
         List<EmployeeReportItemDTO> weeklyReportJiraIssues = jiraService.getWeeklyReportJiraIssues();
@@ -43,6 +47,11 @@ public class WeeklyReportController {
     }
 
 
+    /**
+     * 下载团队成员周报
+     * @param response
+     * @param date
+     */
     @SneakyThrows
     @GetMapping("/download")
     public void downloadWeeklyReport(HttpServletResponse response, @RequestParam(name = "date") String date) {
