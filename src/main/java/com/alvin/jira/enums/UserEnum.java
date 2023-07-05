@@ -17,13 +17,13 @@ import cn.hutool.core.util.StrUtil;
 public enum UserEnum {
 
     CXW("cxw", "陈旭伟", "other", "15558007607"),
-    YZW("yuzw", "余志伟", "sdm", "17857093638"),
+    YZW("yuzw", "余志伟", "other", "17857093638"),
     XLJ("xuanlj", "宣林杰", "sdm", "18657113845"),
     LF("lufan", "卢凡", "sdm", "17816875536"),
     JQJ("jiangqijie", "蒋琦杰", "other", "13777881457"),
-    NJL("niejl", "聂嘉梁", "other", "18698578696"),
+    NJL("niejl", "聂嘉梁", "sdm", "18698578696"),
     LYZ("liyz", "李元智", "sdm", "15270032962"),
-    LY("liyang", "李杨", "other", "15710403550"),
+    LY("liyang", "李杨", "sdm", "15710403550"),
     CZR("chengzr", "程峥嵘", "feature", "15568928265"),
     CS("chensen", "陈森", "other", "17816096717"),
     QJ("qiangj", "强瑾", "feature", "17393165662"),
@@ -35,7 +35,15 @@ public enum UserEnum {
     ZX("zhangx", "张笑", "front", "18291072670"),
     QZW("qizw", "戚泽威", "front", "15757386707"),
     XMM("xumm", "徐萌萌", "front", "18910260525"),
-    GRT("guort", "郭荣婷", "front", "17823886624");
+    GRT("guort", "郭荣婷", "front", "17823886624"),
+    XJQ("xiaojq", "郭荣婷", "prod", "17601037997"),
+    CHD("chenhd", "陈昊栋", "prod", "13735870866"),
+    LRC("liurc", "刘荣灿", "prod", "17376502396"),
+    LLL("liangll", "梁丽丽", "tester", "18257346036"),
+    ZGP("zhanggp", "章关平", "tester", "18100174728"),
+    LB("lib", "李冰", "tester", "15983897556"),
+    WYY("wangyy1", "王跃跃", "tester", "18305576478"),
+    MJM("miaojm", "缪佳美", "tester", "18767105004");
 
     private String userName;
 
@@ -112,4 +120,14 @@ public enum UserEnum {
         return null;
     }
 
+    public static boolean isTester(String username) {
+        if(StrUtil.isEmpty(username)) {
+            return false;
+        }
+        UserEnum user = UserEnum.getUser(username);
+        if(user == null) {
+            return false;
+        }
+        return "tester".equals(user.getUserType());
+    }
 }

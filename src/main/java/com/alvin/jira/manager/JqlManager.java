@@ -34,9 +34,21 @@ public class JqlManager {
      * @return
      */
     public static String getUserExpireTasksJql(List<String> users, String dueDateStr) {
-        String jqlTmpl = "resolution = Unresolved and due < {} AND assignee in ({}) ORDER BY priority DESC";
+        String jqlTmpl = "resolution = Unresolved and due <= {} AND assignee in ({}) ORDER BY priority DESC";
         String jql = StrUtil.format(jqlTmpl, dueDateStr, CollUtil.join(users, ","));
         return jql;
+    }
+
+    /**
+     * 获取指定时间范围内用户的缺陷和改进列表
+     * @param users 用户
+     * @param startDate 开始时间
+     * @param endDate 结束时间
+     * @return
+     */
+    public static String getUserBugsJql(List<String> users, String startDate, String endDate) {
+        String jqlTmpl = "issuetype in (Bug, 缺陷, 问题) AND created >= {} AND created <= {} AND assignee in ({})";
+        return StrUtil.format(jqlTmpl, startDate, endDate, CollUtil.join(users, ","));
     }
 
 }

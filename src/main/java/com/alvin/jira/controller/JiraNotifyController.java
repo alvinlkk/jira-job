@@ -37,7 +37,7 @@ public class JiraNotifyController {
      */
     @GetMapping("/nextWeekUnCreateTasks")
     public String notifynextWeekUnCreateTasks() {
-        dingTalkNotifyService.notifyNextWeekUnCreateTasks();;
+        dingTalkNotifyService.notifyNextWeekUnCreateTasks();
         return "ok";
     }
 

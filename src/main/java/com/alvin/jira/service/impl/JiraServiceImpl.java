@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 import org.springframework.stereotype.Service;
@@ -59,6 +60,9 @@ public class JiraServiceImpl implements JiraService {
                             if (hours == null || StrUtil.isBlank(hours.toString())) {
                                 return 0;
                             }
+                            if(StrUtil.equals("null", hours.toString())) {
+                                return 0;
+                            }
                             return Double.valueOf(hours.toString()).intValue();
                         })));
 
@@ -73,14 +77,10 @@ public class JiraServiceImpl implements JiraService {
     }
 
 
+    @SneakyThrows
     @Override
     public Map<String, List<String>> getUserExpireIssues() {
-        List<Issue> allExpireIssues = null;
-        try {
-            allExpireIssues = JiraManager.getAllExpireTasks(new Date());
-        } catch (JiraException e) {
-            e.printStackTrace();
-        }
+        List<Issue> allExpireIssues = JiraManager.getAllExpireTasks(new Date());;
         Map<String, List<String>> userJiraIdsMap = allExpireIssues.stream()
                 .collect(Collectors.groupingBy(issue -> issue.getAssignee().getName(),
                         Collectors.mapping(Issue::getKey, Collectors.toList())));
@@ -120,6 +120,9 @@ public class JiraServiceImpl implements JiraService {
             }, Collectors.summingInt(issue -> {
                 Object hours = issue.getField("customfield_12100");
                 if (hours == null || StrUtil.isBlank(hours.toString())) {
+                    return 0;
+                }
+                if(StrUtil.equals("null", hours.toString())) {
                     return 0;
                 }
                 return Double.valueOf(hours.toString()).intValue();

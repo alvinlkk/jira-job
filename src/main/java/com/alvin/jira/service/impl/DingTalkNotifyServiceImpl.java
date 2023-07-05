@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.alvin.jira.dto.UserExpireIssuesDTO;
+import com.alvin.jira.dto.UserIssuesDTO;
 import com.alvin.jira.enums.UserEnum;
 import com.alvin.jira.manager.DingTalkNotifyManager;
 import com.alvin.jira.service.DingTalkNotifyService;
@@ -26,15 +26,17 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 /**
- * <p>描 述：</p>
+ * <p>钉钉通知服务：</p>
  *
  * @author cxw (332059317@qq.com)
  * @version 1.0.0
  * @since 2023/6/1  16:59
  */
 @Service
+@Slf4j
 public class DingTalkNotifyServiceImpl implements DingTalkNotifyService {
 
     @Autowired
@@ -80,9 +82,9 @@ public class DingTalkNotifyServiceImpl implements DingTalkNotifyService {
             return;
         }
 
-        List<UserExpireIssuesDTO> userExpireIssuesDtos = new ArrayList<>();
+        List<UserIssuesDTO> userExpireIssuesDtos = new ArrayList<>();
         userExpireIssues.forEach((username, jiraIds) -> {
-            UserExpireIssuesDTO userExpireIssuesDto = new UserExpireIssuesDTO();
+            UserIssuesDTO userExpireIssuesDto = new UserIssuesDTO();
             String mobile = UserEnum.getMobileByUserName(username);
             userExpireIssuesDto.setMobile(mobile);
             userExpireIssuesDto.setJiraIds(jiraIds);
@@ -99,8 +101,34 @@ public class DingTalkNotifyServiceImpl implements DingTalkNotifyService {
         StringWriter stringWriter = new StringWriter();
         temp.process(params, stringWriter);
 
-        List<String> mobiles = userExpireIssuesDtos.stream().map(UserExpireIssuesDTO::getMobile).collect(Collectors.toList());
+        List<String> mobiles = userExpireIssuesDtos.stream().map(UserIssuesDTO::getMobile).collect(Collectors.toList());
         DingTalkNotifyManager.sendMarkDown("过期任务", stringWriter.toString(), mobiles);
+    }
+
+
+    @Override
+    @SneakyThrows
+    public void notifyByTmpl(List<UserIssuesDTO> users, String tmplName, String notifyTitle) {
+        if(CollUtil.isEmpty(users)) {
+            log.warn("没有用户需要通知");
+        }
+        Map<String, List<String>> userExpireIssues = jiraService.getUserExpireIssues();
+        if(CollUtil.isEmpty(userExpireIssues)) {
+            return;
+        }
+
+        TemplateLoader templateLoader = new ClassTemplateLoader(this.getClass(), "/");
+        Configuration cfg = new Configuration(Configuration.VERSION_2_3_22);
+        cfg.setTemplateLoader(templateLoader);;
+        cfg.setDefaultEncoding("UTF-8");
+        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+        Map<String, Object> params = new HashMap<>();
+        params.put("users", users);
+        Template temp = cfg.getTemplate(tmplName);
+        StringWriter stringWriter = new StringWriter();
+        temp.process(params, stringWriter);
+        List<String> mobiles = users.stream().map(UserIssuesDTO::getMobile).collect(Collectors.toList());
+        DingTalkNotifyManager.sendMarkDown(notifyTitle, stringWriter.toString(), mobiles);
     }
 
 }

@@ -1,8 +1,6 @@
 package com.alvin.jira.manager;
 
-import java.util.Arrays;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -45,12 +43,36 @@ public class JiraManager {
         return searchResult.issues;
     }
 
+    /**
+     * 获取所有过期的任务
+     *
+     * @param endDate 截止时间
+     * @return
+     * @throws JiraException
+     */
     public static List<Issue> getAllExpireTasks(Date endDate) throws JiraException {
         List<String> allUserNames = UserEnum.getAllUserNames();
         String endDateStr = DateUtil.format(endDate, DATE_FORMATE);
         String userTasksJql = JqlManager.getUserExpireTasksJql(allUserNames, endDateStr);
         JiraClient jiraClient = getJiraClient();
-        Issue.SearchResult searchResult = jiraClient.searchIssues(userTasksJql);
+        Issue.SearchResult searchResult = jiraClient.searchIssues(userTasksJql, 100000);
+        return searchResult.issues;
+    }
+
+    /**
+     * 获取用户的缺陷列表
+     * @param startDate 开始时间
+     * @param endDate 结束时间
+     * @return
+     * @throws JiraException
+     */
+    public static List<Issue> getUserBugs(Date startDate, Date endDate) throws JiraException {
+        List<String> allUserNames = UserEnum.getAllUserNames();
+        String startDateStr = DateUtil.format(startDate, DATE_FORMATE);
+        String endDateStr = DateUtil.format(endDate, DATE_FORMATE);
+        String userTasksJql = JqlManager.getUserBugsJql(allUserNames, startDateStr, endDateStr);
+        JiraClient jiraClient = getJiraClient();
+        Issue.SearchResult searchResult = jiraClient.searchIssues(userTasksJql, 100000);
         return searchResult.issues;
     }
 
