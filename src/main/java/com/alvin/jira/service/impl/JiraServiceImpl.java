@@ -1,14 +1,11 @@
 package com.alvin.jira.service.impl;
 
-import java.util.ArrayList;;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 import org.springframework.stereotype.Service;
@@ -23,6 +20,8 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.rcarz.jiraclient.Issue;
 import net.rcarz.jiraclient.JiraException;
+
+;
 
 /**
  * <p>描 述：</p>
@@ -60,7 +59,7 @@ public class JiraServiceImpl implements JiraService {
                             if (hours == null || StrUtil.isBlank(hours.toString())) {
                                 return 0;
                             }
-                            if(StrUtil.equals("null", hours.toString())) {
+                            if (StrUtil.equals("null", hours.toString())) {
                                 return 0;
                             }
                             return Double.valueOf(hours.toString()).intValue();
@@ -80,7 +79,8 @@ public class JiraServiceImpl implements JiraService {
     @SneakyThrows
     @Override
     public Map<String, List<String>> getUserExpireIssues() {
-        List<Issue> allExpireIssues = JiraManager.getAllExpireTasks(new Date());;
+        List<Issue> allExpireIssues = JiraManager.getAllExpireTasks(new Date());
+        ;
         Map<String, List<String>> userJiraIdsMap = allExpireIssues.stream()
                 .collect(Collectors.groupingBy(issue -> issue.getAssignee().getName(),
                         Collectors.mapping(Issue::getKey, Collectors.toList())));
@@ -106,23 +106,16 @@ public class JiraServiceImpl implements JiraService {
         Map<String, List<Issue>> jiraIssueGroupMap = jiraIssues.stream().collect(Collectors.groupingBy(item -> item.getAssignee().getName()));
         jiraIssueGroupMap.forEach((jiraName, issues) -> {
             UserEnum user = UserEnum.getUser(jiraName);
-            if(user == null) {
+            if (user == null) {
                 return;
             }
 
-            Map<String, Integer> summaryHoursMap = issues.stream().collect(Collectors.groupingBy(issue -> {
-                String summary = "";
-                if(issue.getParent() != null) {
-                    summary += issue.getParent().getSummary() + "——";
-                }
-                summary += issue.getSummary();
-                return summary;
-            }, Collectors.summingInt(issue -> {
+            Map<String, Integer> summaryHoursMap = issues.stream().collect(Collectors.groupingBy(issue -> issue.getSummary(), Collectors.summingInt(issue -> {
                 Object hours = issue.getField("customfield_12100");
                 if (hours == null || StrUtil.isBlank(hours.toString())) {
                     return 0;
                 }
-                if(StrUtil.equals("null", hours.toString())) {
+                if (StrUtil.equals("null", hours.toString())) {
                     return 0;
                 }
                 return Double.valueOf(hours.toString()).intValue();

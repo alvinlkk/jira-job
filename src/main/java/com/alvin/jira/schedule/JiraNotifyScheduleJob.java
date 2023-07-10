@@ -49,7 +49,7 @@ public class JiraNotifyScheduleJob {
 //    }
 
     @SneakyThrows
-    @Scheduled(cron = "0 0 15-18 ? * 1-5")
+    @Scheduled(cron = "0 0 19 ? * 1-5")
     public void notifyUserBugNum() {
         bugsStatisticsService.notifyCurrentWeekUserBugNum();
     }
