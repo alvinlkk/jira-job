@@ -37,16 +37,10 @@ public class JiraNotifyScheduleJob {
         dingTalkNotifyService.notifyNextWeekUnCreateTasks();
     }
 
-    @Scheduled(cron = "0 0,10,20,30 18 ? * 1-5")
+    @Scheduled(cron = "0 0/5 18 ? * 1-5")
     public void notifyExpireTasks() {
         dingTalkNotifyService.notifyExpireTasks();
     }
-
-//    @SneakyThrows
-//    @Scheduled(cron = "0 0 15-18 ? * 1-5")
-//    public void notifyUnlogBugReason() {
-//        bugsStatisticsService.notifyUnlogBugReason();
-//    }
 
     @SneakyThrows
     @Scheduled(cron = "0 0 19 ? * 1-5")

@@ -22,7 +22,7 @@ public class JqlManager {
      * @return
      */
     public static String getUserTasksJql(List<String> users, String dueDateStart, String dueDateEnd) {
-        String jqlTmpl = "project in (SDM, ZNJCPTYH, FEATURE,PD) AND issuetype in (子任务-产品, \"子任务-开发(前端)\", \"子任务-开发(后端)\", 子任务-测试, 子任务-设计, 需求(敏捷))  AND due >= {} AND due <= {} AND assignee in ({}) ORDER BY priority DESC";
+        String jqlTmpl = "project in (SDM, ZNJCPTYH, FEATURE,PD) AND issuetype in (子任务-产品, \"子任务-开发(前端)\", \"子任务-开发(后端)\", 子任务-测试, 子任务-设计, \"需求(敏捷)\")  AND due >= {} AND due <= {} AND assignee in ({}) ORDER BY priority DESC";
         String jql = StrUtil.format(jqlTmpl, dueDateStart, dueDateEnd, CollUtil.join(users, ","));
         return jql;
     }
