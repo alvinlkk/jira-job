@@ -5,9 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.commons.compress.utils.Lists;
-
-import com.alvin.jira.enums.UserEnum;
+import com.alvin.jira.manager.EmployeeManager;
 
 import cn.hutool.core.collection.CollUtil;
 import lombok.Data;
@@ -15,6 +13,7 @@ import net.rcarz.jiraclient.Issue;
 
 /**
  * <p>描 述：</p>
+ * 员工JIRA信息
  *
  * @author cxw (332059317@qq.com)
  * @version 1.0.0
@@ -29,7 +28,7 @@ public class UserIssuesDTO {
 
 
     public static List<UserIssuesDTO> buildUserIssuesFromIssues(List<Issue> issues) {
-        if(CollUtil.isEmpty(issues)) {
+        if (CollUtil.isEmpty(issues)) {
             return new ArrayList<>();
         }
         Map<String, List<String>> userJiraIdsMap = issues.stream()
@@ -38,7 +37,7 @@ public class UserIssuesDTO {
         List<UserIssuesDTO> userIssues = new ArrayList<>();
         userJiraIdsMap.forEach((username, jiraIds) -> {
             UserIssuesDTO userExpireIssuesDto = new UserIssuesDTO();
-            String mobile = UserEnum.getMobileByUserName(username);
+            String mobile = EmployeeManager.getMobileByUserName(username);
             userExpireIssuesDto.setMobile(mobile);
             userExpireIssuesDto.setJiraIds(jiraIds);
             userIssues.add(userExpireIssuesDto);

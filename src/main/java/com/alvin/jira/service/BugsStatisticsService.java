@@ -3,7 +3,7 @@ package com.alvin.jira.service;
 import net.rcarz.jiraclient.JiraException;
 
 /**
- * <p>bug统计：</p>
+ * <p>bug统计服务类</p>
  *
  * @author cxw (332059317@qq.com)
  * @version 1.0.0

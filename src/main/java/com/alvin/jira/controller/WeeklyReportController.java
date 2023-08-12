@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alvin.jira.dto.EmployeeReportItemDTO;
-import com.alvin.jira.service.JiraService;
 import com.alvin.jira.service.WeeklyReportService;
 
 import lombok.SneakyThrows;
@@ -30,8 +29,6 @@ import lombok.SneakyThrows;
 @RestController
 @RequestMapping("/weekly/report")
 public class WeeklyReportController {
-    @Autowired
-    private JiraService jiraService;
 
     @Autowired
     private WeeklyReportService weeklyReportService;
@@ -42,7 +39,7 @@ public class WeeklyReportController {
      */
     @GetMapping("/detail")
     public List<EmployeeReportItemDTO> reportDetail () {
-        List<EmployeeReportItemDTO> weeklyReportJiraIssues = jiraService.getWeeklyReportJiraIssues();
+        List<EmployeeReportItemDTO> weeklyReportJiraIssues = weeklyReportService.getWeeklyReportJiraIssues();
         return weeklyReportJiraIssues;
     }
 

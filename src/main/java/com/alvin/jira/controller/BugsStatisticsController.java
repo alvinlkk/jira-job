@@ -23,13 +23,6 @@ public class BugsStatisticsController {
     @Autowired
     private BugsStatisticsService bugReportService;
 
-//    @SneakyThrows
-//    @GetMapping("/notify/unlog/bugReason")
-//    public String notifyUnlogBugReason() {
-//        bugReportService.notifyUnlogBugReason();
-//        return "success";
-//    }
-
     @GetMapping("/notifyCurrentWeekUserBugNum")
     public String notifyCurrentWeekUserBugNum() {
         bugReportService.notifyCurrentWeekUserBugNum();

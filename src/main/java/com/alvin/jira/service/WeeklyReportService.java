@@ -4,6 +4,11 @@
 package com.alvin.jira.service;
 
 import java.io.OutputStream;
+import java.util.List;
+
+import com.alvin.jira.dto.EmployeeReportItemDTO;
+
+import lombok.SneakyThrows;
 
 /**
  * 周报服务
@@ -19,4 +24,12 @@ public interface WeeklyReportService {
      * @param startDate 周报起始日期
      */
     void downloadWeeklyReport(OutputStream out, String startDate);
+
+    /**
+     * 获取下周报表任务
+     *
+     * @return
+     */
+    @SneakyThrows
+    List<EmployeeReportItemDTO> getWeeklyReportJiraIssues();
 }

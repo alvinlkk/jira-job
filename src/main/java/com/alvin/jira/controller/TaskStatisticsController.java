@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alvin.jira.service.DingTalkNotifyService;
+import com.alvin.jira.service.TaskStatisticsService;
 
 /**
  * <p>jira任务通知</p>
@@ -15,11 +15,11 @@ import com.alvin.jira.service.DingTalkNotifyService;
  * @since 2023/6/1  17:12
  */
 @RestController
-@RequestMapping("/jira/notify")
-public class JiraNotifyController {
+@RequestMapping("/tasks/statistics")
+public class TaskStatisticsController {
 
     @Autowired
-    private DingTalkNotifyService dingTalkNotifyService;
+    private TaskStatisticsService dingTalkNotifyService;
 
     /**
      * 通知今日未创建任务人员

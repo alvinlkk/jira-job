@@ -8,25 +8,26 @@ import lombok.SneakyThrows;
 
 /**
  * <p>描 述：</p>
+ * 员工任务统计服务
  *
  * @author cxw (332059317@qq.com)
  * @version 1.0.0
  * @since 2023/6/1  16:59
  */
-public interface DingTalkNotifyService {
-
-    void notifyTodayUncreateTasks();
-
-    void notifyNextWeekUnCreateTasks();
-
-    void notifyExpireTasks();
+public interface TaskStatisticsService {
 
     /**
-     * 根据模板通知
-     *
-     * @param users 通知的用户
-     * @param tmplName 模板名称
-     * @param notifyTitle 通知标题
+     * 通知当天未创建任务员工
      */
-    void notifyByTmpl(List<UserIssuesDTO> users, String tmplName, String notifyTitle);
+    void notifyTodayUncreateTasks();
+
+    /**
+     * 通知下周未创建任务员工
+     */
+    void notifyNextWeekUnCreateTasks();
+
+    /**
+     * 过期任务通知
+     */
+    void notifyExpireTasks();
 }

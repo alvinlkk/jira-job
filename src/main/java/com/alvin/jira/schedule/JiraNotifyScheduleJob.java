@@ -3,11 +3,9 @@ package com.alvin.jira.schedule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
 
-import com.alvin.jira.controller.BugsStatisticsController;
 import com.alvin.jira.service.BugsStatisticsService;
-import com.alvin.jira.service.DingTalkNotifyService;
+import com.alvin.jira.service.TaskStatisticsService;
 
 import lombok.SneakyThrows;
 
@@ -22,7 +20,7 @@ import lombok.SneakyThrows;
 public class JiraNotifyScheduleJob {
 
     @Autowired
-    private DingTalkNotifyService dingTalkNotifyService;
+    private TaskStatisticsService dingTalkNotifyService;
 
     @Autowired
     private BugsStatisticsService bugsStatisticsService;
