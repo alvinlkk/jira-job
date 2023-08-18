@@ -28,6 +28,10 @@ public class JiraConfig {
     @Autowired
     private JiraAuthProperties jiraAuthProperties;
 
+    /**
+     * jira client的bean
+     * @return
+     */
     @Bean
     public JiraClient createJiraClient() {
         BasicCredentials creds = new BasicCredentials(jiraAuthProperties.getUsername(), jiraAuthProperties.getPassword());

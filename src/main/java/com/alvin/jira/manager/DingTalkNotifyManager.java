@@ -56,8 +56,7 @@ public class DingTalkNotifyManager {
             byte[] signData = mac.doFinal(stringToSign.getBytes("UTF-8"));
             String sign = URLEncoder.encode(new String(Base64.encodeBase64(signData)), "UTF-8");
             String urlTmpl = dingTalkProperties.getUrl() + "&timestamp={}&sign={}";
-            String url = StrUtil.format(urlTmpl, timestamp, sign);
-            return url;
+            return StrUtil.format(urlTmpl, timestamp, sign);
         } catch (Exception e) {
             log.error("getDingTalkUrl error", e);
         }
@@ -87,6 +86,12 @@ public class DingTalkNotifyManager {
         }
     }
 
+    /**
+     * 发送markdown内容
+     * @param title 标题
+     * @param content 内容
+     * @param mobiles 手机号，需要@的人
+     */
     public void sendMarkDown(String title, String content, List<String> mobiles) {
         String url = genDingTalkUrl();
         DingTalkClient client = new DefaultDingTalkClient(url);

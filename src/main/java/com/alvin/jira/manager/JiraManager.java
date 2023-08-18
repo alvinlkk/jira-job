@@ -34,6 +34,7 @@ import net.rcarz.jiraclient.JiraException;
 public class JiraManager {
 
     private static final String DATE_FORMATE = "yyyy-MM-dd";
+
     @Autowired
     private JiraClient jiraClient;
 

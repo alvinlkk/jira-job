@@ -34,7 +34,7 @@ public class JiraNotifyScheduleJob {
     public void notifynextWeekUnCreateTasks() {
         dingTalkNotifyService.notifyNextWeekUnCreateTasks();
     }
-
+    
     @Scheduled(cron = "0 0/5 18 ? * 1-5")
     public void notifyExpireTasks() {
         dingTalkNotifyService.notifyExpireTasks();
