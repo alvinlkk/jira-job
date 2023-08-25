@@ -38,7 +38,7 @@ public class WeeklyReportController {
      * @return
      */
     @GetMapping("/detail")
-    public List<EmployeeReportItemDTO> reportDetail () {
+    public List<EmployeeReportItemDTO> reportDetail() {
         List<EmployeeReportItemDTO> weeklyReportJiraIssues = weeklyReportService.getWeeklyReportJiraIssues();
         return weeklyReportJiraIssues;
     }
